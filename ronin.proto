@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package bp;
+
+service Ronin {
+    rpc BuildRemoteTCPForward (ForwardRequest) returns (ForwardResponse) {
+    }
+    rpc BuildProxyForward (stream TrafficFromClient) returns (stream TrafficFromServer) {
+    }
+}
+
+message Buffer {
+    bytes Raw = 1;
+}
+
+message TrafficFromClient {
+    Buffer Buffer = 1;
+    string ToHost = 2;
+    uint32 ToPort = 3;
+}
+
+message TrafficFromServer {
+    Buffer Buffer = 1;
+    string FromHost = 2;
+    uint32 FromPort = 3;
+}
+
+message ForwardRequest {
+    string TargetHost = 1;
+    uint32 TargetPort = 2;
+    uint32 RoninPort = 3;
+}
+
+message ForwardResponse {
+    bool Ok = 1;
+    string Reason = 2;
+}
